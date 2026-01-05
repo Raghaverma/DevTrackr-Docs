@@ -1,0 +1,107 @@
+/**
+ * Core types for DevTrackr SDK
+ * All types match the exact specification
+ */
+interface Profile {
+    username: string;
+    name: string | null;
+    avatarUrl: string;
+    bio: string | null;
+    followers: number;
+    following: number;
+    publicRepos: number;
+    profileUrl: string;
+}
+interface Repository {
+    name: string;
+    description: string | null;
+    stars: number;
+    forks: number;
+    primaryLanguage: string | null;
+    updatedAt: string;
+    repoUrl: string;
+}
+interface RecentCommit {
+    repo: string;
+    message: string;
+    additions: number;
+    deletions: number;
+    committedAt: string;
+    commitUrl: string;
+}
+interface LanguageStat {
+    name: string;
+    percentage: number;
+    color: string;
+}
+interface LanguageStats {
+    totalBytes: number;
+    languages: LanguageStat[];
+}
+interface ContributionStats {
+    totalCommits: number;
+    activeDays: number;
+    avgCommitsPerWeek: number;
+    longestStreak: number;
+    currentStreak: number;
+}
+interface ActivityTimelineItem {
+    date: string;
+    commits: number;
+}
+type ActivityTimeline = ActivityTimelineItem[];
+interface RepositoryOptions {
+    sort?: 'created' | 'updated' | 'pushed' | 'full_name';
+    direction?: 'asc' | 'desc';
+    perPage?: number;
+    page?: number;
+}
+interface CommitOptions {
+    perPage?: number;
+    page?: number;
+    since?: string;
+    until?: string;
+}
+interface ActivityTimelineOptions {
+    days?: number;
+}
+interface DevTrackrConfig {
+    token: string;
+}
+interface DevTrackrInstance {
+    getProfile(username: string): Promise<Profile>;
+    getRepositories(username: string, options?: RepositoryOptions): Promise<Repository[]>;
+    getRecentCommits(username: string, options?: CommitOptions): Promise<RecentCommit[]>;
+    getLanguageStats(username: string): Promise<LanguageStats>;
+    getContributionStats(username: string): Promise<ContributionStats>;
+    getActivityTimeline(username: string, options?: ActivityTimelineOptions): Promise<ActivityTimeline>;
+}
+
+/**
+ * DevTrackr factory function
+ * Creates a DevTrackr instance with all required methods
+ */
+
+declare function createDevTrackr(config: DevTrackrConfig): DevTrackrInstance;
+
+/**
+ * Custom error classes for DevTrackr
+ * Matches specification requirements
+ */
+declare class DevTrackrError extends Error {
+    constructor(message: string);
+}
+declare class DevTrackrAuthError extends DevTrackrError {
+    constructor(message?: string);
+}
+declare class DevTrackrRateLimitError extends DevTrackrError {
+    readonly limit: number;
+    readonly remaining: number;
+    readonly resetAt: Date;
+    constructor(message: string, limit: number, remaining: number, resetAt: Date);
+}
+declare class DevTrackrNetworkError extends DevTrackrError {
+    constructor(message?: string);
+}
+
+export { type ActivityTimeline, type ActivityTimelineItem, type ActivityTimelineOptions, type CommitOptions, type ContributionStats, DevTrackrAuthError, type DevTrackrConfig, DevTrackrError, type DevTrackrInstance, DevTrackrNetworkError, DevTrackrRateLimitError, type LanguageStat, type LanguageStats, type Profile, type RecentCommit, type Repository, type RepositoryOptions, createDevTrackr };

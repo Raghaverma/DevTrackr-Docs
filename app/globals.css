@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #0D0D0D;
+  --color-foreground: #FFFFFF;
+  --color-border: #404040;
+  --color-input: #404040;
+  --color-ring: #B8B8B8;
+
+  --color-card: #1A1A1A;
+  --color-card-foreground: #FFFFFF;
+  --color-popover: #1A1A1A;
+  --color-popover-foreground: #FFFFFF;
+  --color-primary: #FFFFFF;
+  --color-primary-foreground: #0D0D0D;
+  --color-secondary: #B8B8B8;
+  --color-secondary-foreground: #0D0D0D;
+  --color-muted: #1A1A1A;
+  --color-muted-foreground: #B8B8B8;
+  --color-accent: #404040;
+  --color-accent-foreground: #FFFFFF;
+  --color-destructive: #7F1D1D;
+  --color-destructive-foreground: #FFFFFF;
+
+  --color-luxury-black: #0D0D0D;
+  --color-luxury-charcoal: #1A1A1A;
+  --color-luxury-white: #FFFFFF;
+  --color-luxury-silver: #B8B8B8;
+  --color-luxury-gray: #404040;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-glow: glow 2s ease-in-out infinite;
+  --animate-slide-up: slideUp 0.5s ease-out forwards;
+  --animate-fade-in: fadeIn 0.5s ease-out forwards;
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes glow {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes slideUp {
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+:root {
+  --background: #0D0D0D;
+  --foreground: #FFFFFF;
+}
+
+body {
+  @apply bg-luxury-black text-luxury-white antialiased selection:bg-luxury-silver selection:text-luxury-black;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-luxury-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-luxury-charcoal rounded-full hover:bg-luxury-gray transition-colors;
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-luxury-charcoal/50 backdrop-blur-md border border-luxury-gray/30 shadow-xl;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .typewriter {
+    overflow: hidden;
+    border-right: 2px solid #4ade80;
+    /* Green cursor */
+    white-space: nowrap;
+    animation:
+      typing 3.5s steps(30, end),
+      blink-caret .75s step-end infinite;
+  }
+
+  @keyframes typing {
+    from {
+      width: 0
+    }
+
+    to {
+      width: 100%
+    }
+  }
+
+  @keyframes blink-caret {
+
+    from,
+    to {
+      border-color: transparent
+    }
+
+    50% {
+      border-color: #4ade80;
+    }
+  }
+}
