@@ -32,49 +32,56 @@ export function LanguageChart({ data }: { data: Record<string, number> }) {
     const topLanguages = languages.slice(0, 5); // Show top 5 in bar
 
     return (
-        <div className="space-y-4">
-            {/* Top Progress Bar */}
-            <div className="flex h-3 w-full overflow-hidden rounded-full bg-secondary">
-                {topLanguages.map(([lang, count]) => (
-                    <div
-                        key={lang}
-                        className="h-full transition-all duration-500 hover:opacity-80"
-                        style={{
-                            width: `${(count / total) * 100}%`,
-                            backgroundColor: getLangColor(lang)
-                        }}
-                        title={`${lang}: ${((count / total) * 100).toFixed(1)}%`}
-                    />
-                ))}
-            </div>
-
-            {/* Horizontal Chips Layout */}
-            <div className="flex flex-wrap gap-2">
-                {languages.map(([lang, count]) => {
-                    const percentage = ((count / total) * 100).toFixed(1);
-                    const isMajor = (count / total) * 100 >= 1;
-
-                    return (
+        <Card className="border-white/5 bg-luxury-charcoal/50 backdrop-blur-xl shadow-lg">
+            <CardHeader className="p-8 pb-4">
+                <CardTitle className="text-xl font-semibold text-white">Language Statistics</CardTitle>
+            </CardHeader>
+            <CardContent className="p-8 pt-4 space-y-6">
+                {/* Progress Bar */}
+                <div className="flex h-4 w-full overflow-hidden rounded-full bg-black/40 ring-1 ring-white/5">
+                    {topLanguages.map(([lang, count]) => (
                         <div
                             key={lang}
-                            className={cn(
-                                "flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all",
-                                isMajor ? "bg-secondary/40 border-white/5 hover:bg-secondary/60" : "bg-transparent border-transparent hover:bg-white/5 opacity-80"
-                            )}
-                        >
+                            className="h-full transition-all duration-500 hover:opacity-80"
+                            style={{
+                                width: `${(count / total) * 100}%`,
+                                backgroundColor: getLangColor(lang)
+                            }}
+                            title={`${lang}: ${((count / total) * 100).toFixed(1)}%`}
+                        />
+                    ))}
+                </div>
+
+                {/* Horizontal Chips Layout */}
+                <div className="flex flex-wrap gap-3">
+                    {languages.map(([lang, count]) => {
+                        const percentage = ((count / total) * 100).toFixed(1);
+                        const isMajor = (count / total) * 100 >= 1;
+
+                        return (
                             <div
-                                className="h-2.5 w-2.5 rounded-full ring-1 ring-white/10"
-                                style={{ backgroundColor: getLangColor(lang) }}
-                            ></div>
-                            <span className="text-sm font-medium text-foreground">
-                                {lang}
-                            </span>
-                            <span className="text-xs font-mono text-muted-foreground ml-1 opacity-70">{percentage}%</span>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
+                                key={lang}
+                                className={cn(
+                                    "flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all duration-300",
+                                    isMajor
+                                        ? "bg-white/5 border-white/5 hover:bg-white/10 text-white"
+                                        : "bg-transparent border-transparent text-luxury-silver hover:bg-white/5"
+                                )}
+                            >
+                                <div
+                                    className="h-2 w-2 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.5)]"
+                                    style={{ backgroundColor: getLangColor(lang) }}
+                                ></div>
+                                <span className="text-sm font-medium">
+                                    {lang}
+                                </span>
+                                <span className="text-xs font-mono opacity-50 ml-1">{percentage}%</span>
+                            </div>
+                        );
+                    })}
+                </div>
+            </CardContent>
+        </Card>
     )
 }
 
@@ -96,78 +103,67 @@ export function ActivityChart({ data, profile }: ActivityProps) {
     if (!data || !Array.isArray(data)) return null;
 
     return (
-        <Card className="border-border bg-card overflow-hidden">
-            <CardHeader className="pb-2">
-                <CardTitle className="text-lg text-foreground font-semibold flex items-center justify-between">
-                    <span>Recent Activity</span>
+        <Card className="border-white/5 bg-luxury-charcoal/50 backdrop-blur-xl overflow-hidden shadow-lg">
+            <CardHeader className="p-8 pb-2">
+                <div className="flex items-center justify-between">
+                    <CardTitle className="text-xl font-semibold text-white">Recent Activity</CardTitle>
                     <a
                         href={`https://github.com/${profile?.login}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-1.5 text-xs font-normal text-muted-foreground hover:text-white transition-colors"
+                        className="flex items-center gap-1.5 text-sm font-medium text-luxury-silver hover:text-white transition-colors group"
                     >
                         <span>View on GitHub</span>
-                        <ExternalLink className="h-3 w-3" />
+                        <ExternalLink className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
                     </a>
-                </CardTitle>
+                </div>
             </CardHeader>
-            <CardContent>
-                <div className="relative">
+            <CardContent className="p-0">
+                <div className="relative p-8 pt-4">
                     {/* Horizontal Scroll Container */}
-                    <div className="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 scrollbar-hide snap-x snap-mandatory">
+                    <div className="flex gap-6 overflow-x-auto pb-4 -mx-8 px-8 scrollbar-hide snap-x snap-mandatory">
                         {data.slice(0, 10).map((commit, i) => (
                             <div
                                 key={i}
-                                className="flex-none w-[280px] snap-center bg-secondary/20 border border-white/5 rounded-xl p-4 hover:bg-secondary/30 transition-colors flex flex-col gap-3 group"
+                                className="flex-none w-[320px] snap-center bg-black/20 border border-white/5 rounded-xl p-5 hover:border-white/10 hover:bg-black/40 transition-all duration-300 flex flex-col gap-4 group"
                             >
                                 {/* Header: Repo & Date */}
-                                <div className="flex items-center justify-between gap-2">
-                                    <div className="flex items-center gap-1.5 min-w-0">
-                                        <GitCommit className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                                        <span className="text-xs font-mono text-purple-400 truncate">
+                                <div className="flex items-center justify-between gap-3">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <div className="p-1.5 rounded-md bg-white/5 text-luxury-silver group-hover:text-white transition-colors">
+                                            <GitCommit className="h-4 w-4" />
+                                        </div>
+                                        <span className="text-xs font-mono text-purple-400 truncate tracking-tight">
                                             {commit.repo}
                                         </span>
                                     </div>
-                                    <span className="text-[10px] text-muted-foreground whitespace-nowrap bg-secondary/50 px-1.5 py-0.5 rounded">
+                                    <span className="text-[10px] uppercase tracking-wider font-semibold text-luxury-silver/50">
                                         {new Date(commit.committedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                     </span>
                                 </div>
 
                                 {/* Message */}
-                                <p className="text-sm text-foreground/90 line-clamp-2 min-h-[40px] leading-snug font-medium">
+                                <p className="text-sm text-white/90 line-clamp-3 min-h-[60px] leading-relaxed font-normal">
                                     {commit.message}
                                 </p>
 
                                 {/* Footer: Author & Stats */}
-                                <div className="mt-auto flex items-center justify-between border-t border-white/5 pt-3">
+                                <div className="mt-auto flex items-center justify-between border-t border-white/5 pt-4">
                                     <div className="flex items-center gap-2">
                                         {profile?.avatar_url && (
-                                            <img src={profile.avatar_url} alt="" className="h-5 w-5 rounded-full opacity-80" />
+                                            <img src={profile.avatar_url} alt="" className="h-6 w-6 rounded-full opacity-80 ring-2 ring-black/50" />
                                         )}
-                                        <span className="text-xs text-muted-foreground truncate max-w-[80px]">
+                                        <span className="text-xs text-luxury-silver truncate max-w-[100px]">
                                             {profile?.name || profile?.login}
                                         </span>
                                     </div>
-                                    <div className="flex items-center gap-2 text-xs font-mono">
-                                        <span className="text-green-400 bg-green-400/10 px-1.5 rounded">+{commit.additions}</span>
-                                        <span className="text-red-400 bg-red-400/10 px-1.5 rounded">-{commit.deletions}</span>
+                                    <div className="flex items-center gap-2 text-xs font-mono font-medium">
+                                        <span className="text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full">+{commit.additions}</span>
+                                        <span className="text-red-400 bg-red-400/10 px-2 py-0.5 rounded-full">-{commit.deletions}</span>
                                     </div>
                                 </div>
                             </div>
                         ))}
-
-                        {/* More Link Card */}
-                        <a
-                            href={`https://github.com/${profile?.login}`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="flex-none w-[100px] snap-center flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-white hover:bg-secondary/30 rounded-xl border border-white/5 transition-all"
-                        >
-                            <div className="h-8 w-8 rounded-full bg-secondary/50 flex items-center justify-center">
-                                <ExternalLink className="h-4 w-4" />
-                            </div>
-                            <span className="text-xs font-medium">View All</span>
-                        </a>
                     </div>
                 </div>
             </CardContent>
