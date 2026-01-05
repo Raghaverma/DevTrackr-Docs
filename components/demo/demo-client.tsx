@@ -20,16 +20,17 @@ export function DemoClient() {
         setData(null)
 
         try {
-            const [profile, repos, languages, activity] = await Promise.all([
+            const [profile, repos, languages, activity, commits] = await Promise.all([
                 fetch(`/api/github/${username}/profile`).then(res => res.json()),
                 fetch(`/api/github/${username}/repositories`).then(res => res.json()),
                 fetch(`/api/github/${username}/languages`).then(res => res.json()),
-                fetch(`/api/github/${username}/activity`).then(res => res.json())
+                fetch(`/api/github/${username}/activity`).then(res => res.json()),
+                fetch(`/api/github/${username}/commits`).then(res => res.json())
             ])
 
             if (profile.error) throw new Error(profile.error);
 
-            setData({ profile, repos, languages, activity })
+            setData({ profile, repos, languages, activity, commits })
         } catch (err) {
             setError("Failed to fetch data. Please try again.")
         } finally {
@@ -48,6 +49,7 @@ export function DemoClient() {
                         className="flex h-12 w-full rounded-full border border-white/10 bg-luxury-charcoal/50 px-3 py-2 pl-12 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-luxury-silver/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:border-white/20 disabled:cursor-not-allowed disabled:opacity-50 text-white backdrop-blur-md transition-all shadow-lg"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                        suppressHydrationWarning
                     />
                 </div>
                 <Button onClick={fetchData} disabled={loading} size="lg" className="h-12 px-8 rounded-full bg-white text-black hover:bg-white/90 font-semibold shadow-[0_0_20px_rgba(255,255,255,0.2)]">
@@ -67,10 +69,10 @@ export function DemoClient() {
                     <div className="grid gap-8 md:grid-cols-[300px_1fr]">
                         <div className="space-y-8">
                             <ProfileCard data={data.profile} />
-                            <LanguageChart data={data.languages} />
-                            <ActivityChart data={data.activity} />
                         </div>
-                        <div className="space-y-8">
+                        <div className="space-y-8 min-w-0">
+                            <LanguageChart data={data.languages} />
+                            <ActivityChart data={data.commits} profile={data.profile} />
                             <RepoGrid data={data.repos} />
                         </div>
                     </div>
